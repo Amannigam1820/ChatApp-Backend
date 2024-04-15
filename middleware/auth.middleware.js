@@ -6,6 +6,8 @@ import { User } from "../models/user.model.js";
 
 const isAuthenticated = TryCatch(async (req, res, next) => {
   const { token } = req.cookies;
+
+  console.log(token);
   
 
   if (!token) {
