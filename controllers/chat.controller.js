@@ -43,6 +43,8 @@ const getMyChat = TryCatch(async (req, res, next) => {
     "name avatar"
   );
 
+  //console.log(chats);
+
   const transformChats = chats.map(({ _id, name, groupChat, members }) => {
     const otherMember = getOtherMember(members, req.user);
     return {
@@ -60,6 +62,8 @@ const getMyChat = TryCatch(async (req, res, next) => {
       }, []),
     };
   });
+
+  console.log(transformChats);
 
   return res.status(200).json({
     success: true,

@@ -18,7 +18,7 @@ app.get("/logout",adminLogout)
 
 // Only admin can access these route
 
- //app.use(adminOnly)
+ app.use(adminOnly)
 
 app.get("/", getAdminData)
 app.get("/users", allUsers);

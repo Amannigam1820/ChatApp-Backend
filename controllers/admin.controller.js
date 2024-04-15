@@ -7,26 +7,55 @@ import jwt from "jsonwebtoken";
 import { cookieOptions } from "../utils/feature.js";
 import {adminSecretKey} from "../app.js"
 
+// const adminLogin = TryCatch(async (req, res, next) => {
+//   const { secretKey } = req.body;
+
+  
+//   const isMatched = secretKey === adminSecretKey;
+//   if (!isMatched) {
+//     return next(new ErrorHandler("Invalid Admin key", 401));
+//   }
+//   const token = jwt.sign(secretKey, process.env.JWT_SECRET_KEY);
+//   return res
+//     .status(200)
+//     .cookie("tokens", token, {
+//       ...cookieOptions,
+//       maxAge: 1000 * 60 * 15,
+//     })
+//     .json({
+//       success: true,
+//       message: "authenticated successfully",
+//     });
+// });
 const adminLogin = TryCatch(async (req, res, next) => {
   const { secretKey } = req.body;
 
-  
   const isMatched = secretKey === adminSecretKey;
   if (!isMatched) {
     return next(new ErrorHandler("Invalid Admin key", 401));
   }
-  const token = jwt.sign(secretKey, process.env.JWT_SECRET_KEY);
-  return res
-    .status(200)
-    .cookie("tokens", token, {
-      ...cookieOptions,
-      maxAge: 1000 * 60 * 15,
-    })
-    .json({
-      success: true,
-      message: "authenticated successfully",
-    });
+
+  // Generate JWT token
+  const token = jwt.sign({ secretKey }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRE });
+
+  const option = {
+    expires: new Date(
+      Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  // Set token as a cookie in the response
+  res.cookie("tokens", token, option);
+
+  // Respond with success message
+  return res.status(200).json({
+    success: true,
+    message: "Authenticated successfully",
+    token
+  });
 });
+
 
 const adminLogout = TryCatch(async (req, res, next) => {
   const pastDate = new Date(0);
