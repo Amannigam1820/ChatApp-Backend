@@ -42,7 +42,7 @@ const sentToken = (user, statusCode, res, message) => {
 
 const cookieOptions = {
   maxAge: 15 * 24 * 60 * 60 * 1000,
-  sameSite: "none",
+   sameSite: "none",
   httpOnly: true,
   secure: true,
 };
