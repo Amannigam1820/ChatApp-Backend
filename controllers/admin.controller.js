@@ -43,6 +43,8 @@ const adminLogin = TryCatch(async (req, res, next) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: 'none',
+    secure: true
   };
 
   // Set token as a cookie in the response
